@@ -10,6 +10,11 @@ RUN git clone https://github.com/beancount/fava
 
 WORKDIR /tmp/build/fava
 RUN git checkout ${FAVA_VERSION}
+
+RUN apt-get update
+RUN apt-get install -y build-essential libxml2-dev libxslt-dev curl \
+        python3 libpython3-dev python3-pip git python3-venv python3-babel
+
 RUN make
 RUN make mostlyclean
 
@@ -18,12 +23,12 @@ ARG BEANCOUNT_VERSION
 
 RUN apt-get update
 RUN apt-get install -y build-essential libxml2-dev libxslt-dev curl \
-        python3 libpython3-dev python3-pip git python3-venv
+        python3 libpython3-dev python3-pip git python3-venv python3-babel
 
 
 ENV PATH "/app/bin:$PATH"
 RUN python3 -mvenv /app
-RUN pip3 install -U pip setuptools pybabel
+RUN pip3 install -U pip setuptools
 COPY --from=node_build_env /tmp/build/fava /tmp/build/fava
 
 WORKDIR /tmp/build
